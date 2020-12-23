@@ -6,7 +6,7 @@ from inc.helpers import argument_or_input, output_info as info, output_error as 
 
 try:
     path = argument_or_input('Please provide the path to directory where the files are located:', 1)
-    num = argument_or_input('Please provide a number of entities to be scanned', 2)
+    num = int(argument_or_input('Please provide a number of entities to be scanned', 2))
     # create the directory for saving output if does not exist
     if not os.path.isdir('out'):
         os.makedirs('out')
@@ -31,9 +31,9 @@ try:
             os.makedirs(out_dir_name)
         file_path = f"{path}/{file}"
         file_handler = open(file_path, 'r')
-        lines = file_handler.readlines()
+        hostnames = file_handler.readlines()
 
-        for hostname in lines:
+        for hostname in hostnames:
             if (entities_scanned >= num):
                 provided_entities_number_scanned = True
                 break
