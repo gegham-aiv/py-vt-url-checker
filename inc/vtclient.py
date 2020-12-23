@@ -35,16 +35,6 @@ class VTClient():
             responseData = self.get(f"urls/{url_id}")
             time.sleep(3)
 
-        results = responseData['data']['attributes']['last_analysis_results']
+        results = responseData['data']['attributes']['last_analysis_stats']
 
-        score = 0
-        for provider in results:
-            result = results[provider]
-            if 'harmless' == result['category']:
-                score += 1
-            elif 'malicious' == result['category']:
-                score -= 1
-            elif 'suspicious' == result['category']:
-                score -= 1
-
-        return score
+        return results['malicious'] + results['suspicious']

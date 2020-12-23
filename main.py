@@ -3,9 +3,11 @@ import os
 import sys
 from datetime import datetime
 
+
 def info(message):
     date_time = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
     print(f'[INFO]: [{date_time}] {message}')
+
 
 if len(sys.argv) < 2:
     print('Please provide the path to directory where the files are located:')
@@ -30,6 +32,6 @@ for file in files:
 
     for hostname in lines:
         info(f"Checking hostname: {hostname}")
-        score = vt_client.is_host_secure(hostname)
-        # message = 'secure' if score > 0 else 'insecure'
-        info(f"Score: {score}")
+        negatives = vt_client.is_host_secure(hostname)
+        message = 'No negative feedback' if negatives < 1 else f'{negatives} services reported the host as malicious / suspicious'
+        info(message)
