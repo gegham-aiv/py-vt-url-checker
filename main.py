@@ -1,16 +1,32 @@
-# This is a sample Python script.
+from inc.vtclient import VTClient
+import os
+import sys
 
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+if len(sys.argv) < 2:
+    print('Please provide the path to directory where the files are located:')
+    path = input()
+else:
+    path = sys.argv[1]
 
+if not os.path.isdir(path):
+    print('Invalid path provided. Exiting')
+    exit()
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
+files = [f for f in os.listdir(path) if os.path.isfile(os.path.join(path, f))]
 
+for file in files:
+    print(file)
 
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('PyCharm')
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+# #
+# # client = VTClient()
+# #
+# #
+# #
+# # client.check('https://www.facebook.com')
+# #
+# #
+# # #
+# # #
+# # # print()
+# # #
+# # # print('hello world')
