@@ -1,3 +1,4 @@
+import os
 from inc.vtclient import VTClient
 from inc.helpers import argument_or_input, output_info as info, output_error as error, get_files_from_dir
 
@@ -21,5 +22,8 @@ try:
             negatives = vt_client.is_host_secure(hostname)
             message = 'No negative feedback' if negatives < 1 else f'{negatives} services reported the host as malicious / suspicious'
             info(message)
+
+        file_handler.close()
+        os.rename(file_path, f'{file_path}.done')
 except ValueError as e:
     error(e)
