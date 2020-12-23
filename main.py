@@ -3,7 +3,11 @@ from inc.helpers import argument_or_input, output_info as info, output_error as 
 
 try:
     path = argument_or_input('Please provide the path to directory where the files are located:', 1)
+    # retrieving the list of all files
     files = get_files_from_dir(path)
+    # filtering the files which have been marked as "done"
+    files = list(filter(lambda file: not file.endswith('.done'), files))
+
     info(f"Total {len(files)} files detected")
     vt_client = VTClient()
     for file in files:
