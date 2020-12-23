@@ -2,6 +2,8 @@ import os
 from datetime import datetime
 import sys
 
+from slugify import slugify
+
 
 def argument_or_input(message, index):
     if len(sys.argv) < index + 1:
@@ -31,3 +33,22 @@ def get_files_from_dir(path):
         raise ValueError('Provided path is not a valid directory')
 
     return [f for f in os.listdir(path) if os.path.isfile(os.path.join(path, f))]
+
+
+def get_out_file_name(hostname, path):
+    out_dir_name = get_out_dir_name(path)
+    # create the directory for saving output for the specific category if does not exist yet
+    if not os.path.isdir(out_dir_name):
+        os.makedirs(out_dir_name)
+    return f'{out_dir_name}/{slugify(hostname)}.json'
+
+
+def get_out_dir_name(path):
+    dir = f'out/{os.path.splitext(path)[0]}'
+    if not os.path.isdir(dir):
+        os.makedirs(dir)
+    return dir
+
+
+def is_hostname_scanned(hostname, path):
+    pass
