@@ -42,7 +42,9 @@ class VTClient():
             result = results[provider]
             if 'harmless' == result['category']:
                 score += 1
-            elif 'harmful' == result['category']:
+            elif 'malicious' == result['category']:
+                score -= 1
+            elif 'suspicious' == result['category']:
                 score -= 1
 
         return score
