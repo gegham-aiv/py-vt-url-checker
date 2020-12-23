@@ -26,7 +26,7 @@ class VTClient():
     def post(self, url, params):
         return self.__make_request('post', url, params)
 
-    def check(self, hostname):
+    def is_host_secure(self, hostname):
         self.post("urls", {'url': hostname})
         encoded_url = base64.b64encode(hostname.encode())
         url_id = encoded_url.decode().replace('=', '')
@@ -45,8 +45,4 @@ class VTClient():
             elif 'harmful' == result['category']:
                 score -= 1
 
-        print(score)
-        if score > 0:
-            print('ok')
-        else:
-            print('be aware')
+        return score
