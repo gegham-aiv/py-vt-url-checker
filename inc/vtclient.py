@@ -26,7 +26,7 @@ class VTClient():
     def post(self, url, params):
         return self.__make_request('post', url, params)
 
-    def is_host_secure(self, hostname):
+    def check_host(self, hostname):
         self.post("urls", {'url': hostname})
         encoded_url = base64.b64encode(hostname.encode())
         url_id = encoded_url.decode().replace('=', '')
@@ -36,5 +36,4 @@ class VTClient():
             time.sleep(3)
 
         results = responseData['data']['attributes']['last_analysis_stats']
-
-        return results['malicious'] + results['suspicious']
+        return results
