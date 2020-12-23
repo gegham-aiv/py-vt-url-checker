@@ -1,37 +1,21 @@
 from inc.vtclient import VTClient
-import os
-import sys
-from datetime import datetime
+from inc.helpers import argument_or_input, output_info as info, output_error as error, get_files_from_dir
 
+try:
+    path = argument_or_input('Please provide the path to directory where the files are located:', 1)
+    files = get_files_from_dir(path)
+    info(f"Total {len(files)} files detected")
+    vt_client = VTClient()
+    for file in files:
+        info(f"Reading file {file}")
+        file_path = f"{path}/{file}"
+        file_handler = open(file_path, 'r')
+        lines = file_handler.readlines()
 
-def info(message):
-    date_time = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
-    print(f'[INFO]: [{date_time}] {message}')
-
-
-if len(sys.argv) < 2:
-    print('Please provide the path to directory where the files are located:')
-    path = input()
-else:
-    path = sys.argv[1]
-
-if not os.path.isdir(path):
-    print('Invalid path provided. Exiting')
-    exit()
-
-files = [f for f in os.listdir(path) if os.path.isfile(os.path.join(path, f))]
-
-vt_client = VTClient()
-
-info(f"Total {len(files)} files detected")
-for file in files:
-    info(f"Reading file {file}")
-    file_path = f"{path}/{file}"
-    file_handler = open(file_path, 'r')
-    lines = file_handler.readlines()
-
-    for hostname in lines:
-        info(f"Checking hostname: {hostname}")
-        negatives = vt_client.is_host_secure(hostname)
-        message = 'No negative feedback' if negatives < 1 else f'{negatives} services reported the host as malicious / suspicious'
-        info(message)
+        for hostname in lines:
+            info(f"Checking hostname: {hostname}")
+            negatives = vt_client.is_host_secure(hostname)
+            message = 'No negative feedback' if negatives < 1 else f'{negatives} services reported the host as malicious / suspicious'
+            info(message)
+except ValueError as e:
+    error(e)
