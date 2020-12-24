@@ -48,7 +48,3 @@ def get_out_dir_name(path):
     if not os.path.isdir(dir):
         os.makedirs(dir)
     return dir
-
-
-def is_hostname_scanned(hostname, path):
-    pass

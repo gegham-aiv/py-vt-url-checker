@@ -1,3 +1,4 @@
 {
-  "api-key": "409a1ba4ace07a17de3e9f5632ff22ac4e99b8bc8c389221467cba0d1ba80e7b"
+  "api-key": "409a1ba4ace07a17de3e9f5632ff22ac4e99b8bc8c389221467cba0d1ba80e7b",
+  "url-base": "https://www.virustotal.com/api/v3"
 }

@@ -1,14 +1,15 @@
 import json
 import os
+from requests.exceptions import HTTPError
 
 from inc.vtclient import VTClient
-from inc.helpers import output_info as info, get_out_file_name
+from inc.helpers import output_info as info, output_error as error, get_out_file_name
 
 
 class Scanner:
-    def __init__(self, path, num, verbose=False):
+    def __init__(self, path, num, verbose=False, client = VTClient()):
         self.path = path
-        self.client = VTClient()
+        self.client = client
         self.num = num
         self.out_path = 'out'
         self.entities_scanned = 0
@@ -59,8 +60,12 @@ class Scanner:
     def scan_hostname(self, hostname, file):
         hostname = hostname.strip()
         self.print_info(f"Checking hostname: {hostname}")
-        results = self.client.check_host(hostname)
-        self.write_data_to_file(hostname, file, results)
+        try:
+            results = self.client.check_host(hostname)
+            self.write_data_to_file(hostname, file, results)
+        except HTTPError as e:
+            self.print_error(f'Could not fetch information from API: {e}')
+
 
     def write_data_to_file(self, hostname, file_name, data):
         out_file_name = get_out_file_name(hostname, file_name)
@@ -81,3 +86,6 @@ class Scanner:
         if not self.print:
             return
         info(message)
+
+    def print_error(self, message):
+        error(message)
