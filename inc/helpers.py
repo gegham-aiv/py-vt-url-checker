@@ -6,13 +6,27 @@ from slugify import slugify
 
 
 def argument_or_input(message, index):
-    if len(sys.argv) < index + 1:
+    arguments = get_args()
+    if len(arguments) < index + 1:
         print(message)
         path = input()
     else:
-        path = sys.argv[index]
+        path = arguments[index]
 
     return path
+
+
+def get_option(name, alias):
+    options = get_options()
+    return f'--{name}' in options or f'-{alias}' in options
+
+
+def get_options():
+    return list(filter(lambda arg: arg.startswith('-'), sys.argv))
+
+
+def get_args():
+    return list(filter(lambda arg: not arg.startswith('-'), sys.argv))
 
 
 def output_info(message):
