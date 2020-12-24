@@ -19,6 +19,12 @@ def output_info(message):
     print(prepare_output('INFO', message))
 
 
+def mkdir(path):
+    # create a directory if not already exists
+    if not os.path.isdir(path):
+        os.makedirs(path)
+
+
 def output_error(message):
     print(prepare_output('ERR', message))
 
@@ -38,13 +44,11 @@ def get_files_from_dir(path):
 def get_out_file_name(hostname, path):
     out_dir_name = get_out_dir_name(path)
     # create the directory for saving output for the specific category if does not exist yet
-    if not os.path.isdir(out_dir_name):
-        os.makedirs(out_dir_name)
+    mkdir(out_dir_name)
     return f'{out_dir_name}/{slugify(hostname)}.json'
 
 
 def get_out_dir_name(path):
     dir = f'out/{os.path.splitext(path)[0]}'
-    if not os.path.isdir(dir):
-        os.makedirs(dir)
+    mkdir(dir)
     return dir

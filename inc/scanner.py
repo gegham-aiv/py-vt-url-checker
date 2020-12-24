@@ -3,7 +3,7 @@ import os
 from requests.exceptions import HTTPError
 
 from inc.vtclient import VTClient
-from inc.helpers import output_info as info, output_error as error, get_out_file_name
+from inc.helpers import output_info as info, output_error as error, get_out_file_name, mkdir
 
 
 class Scanner:
@@ -16,8 +16,7 @@ class Scanner:
         self.needed_entities_scanned = False
         self.print = verbose
         # create the directory for saving output if does not exist
-        if not os.path.isdir(self.out_path):
-            os.makedirs(self.out_path)
+        mkdir(self.out_path)
 
     def start(self):
         # retrieving the list of all files
