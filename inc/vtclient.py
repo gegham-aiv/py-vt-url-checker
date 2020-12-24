@@ -12,6 +12,14 @@ class VTClient():
         self.headers = {"x-apikey": self.api_key, "Accept": "application/json"}
 
     def __make_request(self, method, url, params=None):
+        '''
+        Helper method for making an authorized request to the VirusTotal APIs
+        Already contains the authentication header and url base
+        :param method:
+        :param url:
+        :param params:
+        :return: the response from the API
+        '''
         url = f"{self.url_base}/{url}"
         response = request(
             method=method,
@@ -23,12 +31,28 @@ class VTClient():
         return response.json()
 
     def get(self, url):
+        '''
+        Make a post request to the API service with already pre-defined configurations (base_url & headers)
+        :param url:
+        :return: the response from the API
+        '''
         return self.__make_request('get', url)
 
     def post(self, url, params):
+        '''
+        Make a post request to the API service with already pre-defined configurations (base_url & headers)
+        :param url:
+        :param params:
+        :return: the response from the API
+        '''
         return self.__make_request('post', url, params)
 
     def check_host(self, hostname):
+        '''
+        Checks the host with VirusTotal APIs, returns stats from the API response
+        :param hostname: the host name to check
+        :returns: stats from the API response
+        '''
         self.post("urls", {'url': hostname})
         encoded_url = base64.b64encode(hostname.encode())
         url_id = encoded_url.decode().replace('=', '')

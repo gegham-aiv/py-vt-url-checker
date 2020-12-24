@@ -45,7 +45,7 @@ def get_out_file_name(hostname, path):
     out_dir_name = get_out_dir_name(path)
     # create the directory for saving output for the specific category if does not exist yet
     mkdir(out_dir_name)
-    return f'{out_dir_name}/{slugify(hostname)}.json'
+    return f'{out_dir_name}/{slugify(hostname)}_VTResults.json'
 
 
 def get_out_dir_name(path):

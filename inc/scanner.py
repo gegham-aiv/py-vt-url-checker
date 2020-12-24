@@ -7,7 +7,7 @@ from inc.helpers import output_info as info, output_error as error, get_out_file
 
 
 class Scanner:
-    def __init__(self, path, num, verbose=False, client = VTClient()):
+    def __init__(self, path, num, verbose=False, client=VTClient()):
         self.path = path
         self.client = client
         self.num = num
@@ -19,6 +19,9 @@ class Scanner:
         mkdir(self.out_path)
 
     def start(self):
+        '''
+        Starts looping through the specified path, and scans each entity / hostname via VirusTotal APIs
+        '''
         # retrieving the list of all files
         files = self.get_files()
         # filtering the files which have been marked as "done"
@@ -31,6 +34,7 @@ class Scanner:
             self.print_info(f"Reading file {file}")
             file_path = f"{self.path}/{file}"
             file_handler = open(file_path, 'r')
+            # ignore files which have ".done" appended in the name
             hostnames = list(filter(lambda n: not self.hostname_is_scanned(n, file), file_handler.readlines()))
 
             hostnames_scanned = 0
@@ -49,7 +53,13 @@ class Scanner:
                 os.rename(file_path, f'{file_path}.done')
 
     def hostname_is_scanned(self, hostname, path):
-        # if file exists, then it's already scanned
+        '''
+        Checks whether the hostname is already scanned
+        If file already exists for the hostname, then it's already scanned
+        :param hostname:
+        :param path:
+        :return:
+        '''
         filename = get_out_file_name(hostname.strip(), path)
         return os.path.isfile(filename)
 
@@ -64,7 +74,6 @@ class Scanner:
         self.print_info(f"Checking hostname: {hostname}")
         results = self.client.check_host(hostname)
         self.write_data_to_file(hostname, file, results)
-
 
     def write_data_to_file(self, hostname, file_name, data):
         out_file_name = get_out_file_name(hostname, file_name)
