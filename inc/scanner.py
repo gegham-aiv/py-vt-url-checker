@@ -39,8 +39,11 @@ class Scanner:
                 if self.entities_scanned >= self.num:
                     self.needed_entities_scanned = True
                     break
-                self.scan_hostname(hostname, file)
-                hostnames_scanned += 1
+                try:
+                    self.scan_hostname(hostname, file)
+                    hostnames_scanned += 1
+                except HTTPError as e:
+                    self.print_error(f'Could not fetch information from API: {e}')
 
             file_handler.close()
             if hostnames_scanned == len(hostnames):
@@ -60,11 +63,8 @@ class Scanner:
     def scan_hostname(self, hostname, file):
         hostname = hostname.strip()
         self.print_info(f"Checking hostname: {hostname}")
-        try:
-            results = self.client.check_host(hostname)
-            self.write_data_to_file(hostname, file, results)
-        except HTTPError as e:
-            self.print_error(f'Could not fetch information from API: {e}')
+        results = self.client.check_host(hostname)
+        self.write_data_to_file(hostname, file, results)
 
 
     def write_data_to_file(self, hostname, file_name, data):
